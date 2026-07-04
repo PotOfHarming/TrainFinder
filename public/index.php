@@ -23,7 +23,20 @@
         <div id="map"></div>
 
         
-        <script src="./scripts/map.js"></script>
+        <script>
+            const map = L.map('map').setView([52.3, 4.9], 8);
+
+            <?php
+                include_once(__DIR__ . "/../app/config/Config.php");
+                $map_conf = getConfig(__DIR__ . "/../app/config/map.json");
+            ?>
+            L.tileLayer(<?= json_encode($map_conf["url"]) ?>, {
+                subdomains: <?= json_encode($map_conf["subdomains"]) ?>,
+                maxZoom: <?= $map_conf["maxZoom"] ?>,
+                attribution: <?= json_encode($map_conf["attribution"]) ?>
+            }).addTo(map);
+        </script>
+        <script src="scripts/map.js"></script>
         <script>
             /* Script for drawing stations */
             <?php
