@@ -155,7 +155,7 @@
                     ($pane == null ? "" : (", pane: " . json_encode($pane) . "")) . 
                     "}).bindPopup(" .
                     json_encode("Station {$this->station_name} (Code: {$this->code})") . 
-                    ").addTo({$map});\n";
+                    ").addTo({$map});";
         }
     }
 

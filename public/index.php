@@ -41,7 +41,7 @@
             /* Script for drawing stations */
             <?php
                 require_once(__DIR__ . "/../app/objects/Station.php");
-                foreach(getStations()["stations"] as $station) {
+                foreach (getStations()["stations"] as $station) {
                     echo $station->createMarker(pane: "stations");
                     echo "\n";
                 }
@@ -51,9 +51,23 @@
             /* Script for drawing railways */
             <?php
                 require_once(__DIR__ . "/../app/objects/Railway.php");
-                foreach(getRailways()["railways"] as $railway) {
+                foreach (getRailways()["railways"] as $railway) {
                     echo $railway->createPolyline(pane: "railways");
                     echo "\n";
+                }
+            ?>
+        </script>
+        <script>
+            /* Script for drawing disrupted railways and modifying disrupted stations */
+            <?php
+                require_once(__DIR__ . "/../app/objects/Disruption.php");
+                foreach (fetchDisruptions() as $disruption) {
+                    echo $disruption->createPolyline(pane: "disruptions");
+                    echo "\n";
+                    foreach ($disruption->modifyStations() as $st) {
+                        echo $st;
+                        echo "\n";
+                    }
                 }
             ?>
         </script>

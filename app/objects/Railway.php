@@ -1,14 +1,14 @@
 <?php
     class Railway {
         public string $start_name;
-        public string $start_name_long;
+        public ?string $start_name_long;
         public string $end_name;
-        public string $end_name_long;
+        public ?string $end_name_long;
         public array $coordinates;
 
         public function __construct(
-                string $start_name, string $start_name_long, 
-                string $end_name, string $end_name_long, 
+                string $start_name, ?string $start_name_long, 
+                string $end_name, ?string $end_name_long, 
                 array $coordinates
         ) {
             $this->start_name = $start_name;
@@ -77,7 +77,7 @@
             ]);
         }
 
-        /* Create line for the map */
+        /* Create railway line for the map */
         private string $color = "#808080";
         private int $radius = 3;
         public function createPolyline(string $map = "map", ?string $pane = null): string {
@@ -86,7 +86,7 @@
                     ($pane == null ? "" : (", pane: " . json_encode($pane) . "")) . 
                     "}).bindPopup(" .
                     json_encode("Railway between {$this->start_name_long} ({$this->start_name}) and {$this->end_name_long} ({$this->end_name})") . 
-                    ").addTo({$map});\n";
+                    ").addTo({$map});";
         }
     }
 
