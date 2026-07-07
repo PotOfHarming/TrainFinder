@@ -6,7 +6,7 @@
             $user = "root";
             $pass = "";
             $host = "127.0.0.1";
-            $data = "TrainRadar";
+            $data = "TrainFinder";
 
             try {
                 $this->pdo = new PDO("mysql:host=$host;dbname=$data;charset=utf8", $user, $pass);
@@ -41,6 +41,18 @@
                     lat DECIMAL(9, 6) NOT NULL,
                     lon DECIMAL(9, 6) NOT NULL,
                     tracks INT
+                );",
+
+                "CREATE TABLE IF NOT EXISTS materials (
+                    material_part VARCHAR(10) NOT NULL,
+                    material_type VARCHAR(15) NOT NULL,
+                    material_img VARCHAR(150),
+                    material_length INT NOT NULL,
+                    has_toilet BOOLEAN,
+                    has_power BOOLEAN,
+                    allows_bike BOOLEAN,
+                    is_accessible BOOLEAN,
+                    has_wifi BOOLEAN
                 );"
             ];
 

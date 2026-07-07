@@ -2,5 +2,6 @@
     "url": "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     "subdomains": "abcd",
     "maxZoom": 20,
-    "attribution": "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>"
+    "attribution": "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
+    "refresh_rate": 1000
 }

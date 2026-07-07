@@ -71,5 +71,6 @@
                 }
             ?>
         </script>
+        <?php require_once(__DIR__ . "/../app/components/vehicles_script.php"); ?>
     </body>
 </html>

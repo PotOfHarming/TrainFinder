@@ -56,7 +56,6 @@
                 $this->end_name, $this->end_name_long,
                 json_encode($this->coordinates)
             ]);
-
         }
 
         /* Delete railway from the database */
