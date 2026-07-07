@@ -66,6 +66,7 @@
             if (map_vehicles[vehicle]["last_seen"] > MAX_RELOAD_TIME) {
                 map.removeLayer(map_vehicles[vehicle]["marker"]);
                 delete map_vehicles[vehicle];
+                delete vehicle_ids[vehicle]
             } 
         } else {
             map_vehicles[vehicle]["last_seen"] = 0;
@@ -116,9 +117,12 @@
     function updateVehicles(trainNumber) {
         fetch(`../app/utils/Update.php?type=vehicle&id=${trainNumber}`)
         .then(()=>{
-            fetch(`../app/objects/ride.php?getRide=${trainNumber}&includeImage=true`)
+            fetch(`../app/objects/Ride.php?getRide=${trainNumber}&includeImage=true`)
             .then(res=>res.json())
             .then(data=>{
+                if (data == null) return;
+                console.log(trainNumber, data);
+                if (!("url" in data["rideImage"]) || data["rideImage"]==null) return;
                 let url = data["rideImage"]["url"];
                 map_vehicles[trainNumber].marker.setIcon(
                     L.divIcon({

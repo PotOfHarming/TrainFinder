@@ -1,7 +1,11 @@
 # Objects
 - [x] Railways
 - [x] Stations
-- [] Vehicles
+- [x] Vehicles
+- [x] Ride
+- [x] RideImage
+- [x] Material
+- [] MaterialImage
 
 # Components
 - [] Side panel

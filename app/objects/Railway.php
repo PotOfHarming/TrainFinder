@@ -102,13 +102,15 @@
             $rw_coords = [];
             foreach ($ns_rw_coords as $coord) array_push($rw_coords, [$coord[1], $coord[0]]);
             require_once(__DIR__ . "/Station.php");
-            array_push($railways_list, new Railway(
+            $railway = new Railway(
                 $railway["properties"]["from"],
                 searchStation($railway["properties"]["from"])["name"],
                 $railway["properties"]["to"],
                 searchStation($railway["properties"]["to"])["name"],
                 $rw_coords
-            ));
+            );
+            $railway->saveRailway();
+            array_push($railways_list, $railway);
         }
         return $railways_list;
     }

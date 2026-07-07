@@ -18,7 +18,7 @@
             require_once(__DIR__ . "/../utils/Database.php");
             $db = new Database();
 
-            if (rideExists($this->rideNumber)) {
+            if (!rideExists($this->rideNumber)) {
                 $save_stmt = $db->getConnection()->prepare("
                     INSERT INTO `rides`(
                         `ride_number`, `train_type`, `operator`
@@ -51,7 +51,7 @@
         $stmt = $db->getConnection()->prepare("SELECT COUNT(*) FROM rides WHERE ride_number = ?");
         $stmt->execute([$rideNumber]);
 
-        return $stmt->fetch()!=0;
+        return (bool) $stmt->fetchColumn();
     }
 
     /* Get all materials from the api and potentially save them to the database */
@@ -157,6 +157,8 @@
         }
         return null;
     }
+
+    
 
     if (isset($_GET["isFetch"]) && $_GET["isFetch"]==true) echo json_encode(getAllRides(
         false,

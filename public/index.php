@@ -57,20 +57,8 @@
                 }
             ?>
         </script>
-        <script>
-            /* Script for drawing disrupted railways and modifying disrupted stations */
-            <?php
-                require_once(__DIR__ . "/../app/objects/Disruption.php");
-                foreach (fetchDisruptions() as $disruption) {
-                    echo $disruption->createPolyline(pane: "disruptions");
-                    echo "\n";
-                    foreach ($disruption->modifyStations() as $st) {
-                        echo $st;
-                        echo "\n";
-                    }
-                }
-            ?>
-        </script>
+        <!-- Script for drawing disrupted railways and modifying disrupted stations -->
+        <script src="./scripts/disruptions.js"></script>
         <?php require_once(__DIR__ . "/../app/components/vehicles_script.php"); ?>
     </body>
 </html>

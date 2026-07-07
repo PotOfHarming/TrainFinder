@@ -75,4 +75,16 @@
         }
         return $disruptions;
     }
+
+    if (isset($_GET["fetchDisruptions"])) {
+        $disruptions = fetchDisruptions();
+        $list = [];
+        foreach ($disruptions as $disruption) {
+            array_push($list, $disruption->createPolyline(pane: "disruptions"));
+            foreach($disruption->modifyStations() as $station) {
+                array_push($list, $station);
+            }
+        }
+        echo json_encode($list);
+    }
 ?>

@@ -35,6 +35,7 @@
                     code VARCHAR(10),
                     cdcode INT,
                     uiccode VARCHAR(15),
+                    uiccdcode VARCHAR(25),
                     has_facilities BOOLEAN,
                     has_travelassistence BOOLEAN,
                     country VARCHAR(10),
@@ -52,6 +53,13 @@
                     allows_bike BOOLEAN,
                     is_accessible BOOLEAN,
                     has_wifi BOOLEAN
+                );",
+
+                "CREATE TABLE IF NOT EXISTS material_images (
+                    train_type VARCHAR(25) NOT NULL,
+                    train_img VARCHAR(250) NOT NULL,
+                    img_width INT,
+                    img_height INT
                 );",
 
                 "CREATE TABLE IF NOT EXISTS rides (

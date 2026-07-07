@@ -40,17 +40,11 @@
             $db = new Database();
             $check_stmt = $db->getConnection()->prepare("
                 SELECT COUNT(*) FROM stations WHERE station_name = ?
-                AND station_type = ? AND code = ? AND cdcode = ? 
-                AND uiccode = ? AND uiccdcode = ? AND has_facilities = ?
-                AND has_travelassistence = ? AND country = ?
-                AND lat = ? AND lon = ? AND tracks = ?
+                AND station_type = ?
             ");
 
             $check_stmt->execute([
-                $this->station_name, $this->station_type, $this->code, 
-                $this->cdcode, $this->uiccdcode, $this->has_facilities,
-                $this->has_travelassistence, $this->country,
-                $this->lat, $this->lon, $this->tracks
+                $this->station_name, $this->station_type
             ]);
             if ($check_stmt->fetchColumn() != 0) return true;
             return false;
@@ -65,13 +59,14 @@
             }
 
             $save_stmt = $db->getConnection()->prepare("
-                INSERT INTO railways (
-                    station_name, station_type, code, cdcode, uiccode, uiccdcode, has_facilities, has_travelassitence, country, lat, lon, tracks
+                INSERT INTO stations (
+                    station_name, station_type, code, cdcode, uiccode, uiccdcode, has_facilities, has_travelassistence, country, lat, lon, tracks
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $save_stmt->execute([
-                $this->station_name, $this->code, $this->cdcode,
+                $this->station_name, $this->station_type, 
+                $this->code, $this->cdcode, $this->uiccode,
                 $this->uiccdcode, $this->has_facilities,
                 $this->has_travelassistence, $this->country,
                 $this->lat, $this->lon, $this->tracks
@@ -169,13 +164,15 @@
 
         $stations_list = [];
         foreach ($res as $station) {
-            array_push($stations_list, new Station(
+            $st = new Station(
                 station_name: $station["namen"]["lang"], station_type: $station["stationType"] ?? null, code: $station["code"], 
                 cdcode: $station["cdCode"]  ?? null, uiccode: $station["UICCode"], uiccdcode: $station["UICCdCode"], 
                 has_facilities: $station["heeftFaciliteiten"], has_travelassistence: $station["heeftReisassistentie"], 
                 country: $station["land"], lat: $station["lat"], lon: $station["lng"], 
                 tracks: sizeof($station["sporen"]) > 0 ? sizeof($station["sporen"]) : null
-            ));
+            );
+            $st->saveStation();
+            array_push($stations_list, $st);
             $stations[$station["code"]] = [
                 "name"=> $station["namen"]["lang"], 
                 "type" => $station["stationType"], 
@@ -204,10 +201,10 @@
             foreach ($stations_list as $station) {
                 array_push(
                     $st_list, new Station(
-                        $station["namen"]["lang"], $station["stationType"], $station["code"], $station["cdCode"],
-                        $station["UICCode"], $station["UICCdCode"], $station["heeftFaciliteiten"],
-                        $station["heeftReisassistentie"], $station["land"], $station["lat"], $station["lng"],
-                        sizeof($station["sporen"]) > 0 ? sizeof($station["sporen"]) : null
+                        $station["station_name"], $station["station_type"], $station["code"], $station["cdcode"],
+                        $station["uiccode"], $station["uiccdcode"], $station["has_facilities"],
+                        $station["has_travelassistence"], $station["country"], $station["lat"], $station["lon"],
+                        $station["tracks"] > 0 ? $station["tracks"] : null
                     )
                 );
             }
