@@ -40,12 +40,19 @@
                     }
                 }
                 if (returned) continue;
-                if (newPos in map_vehicles[id]["lastLocs"]) {
-                    map_vehicles[id]["marker"].setLatLng(newPos);
-                    map_vehicles[id]["lastLocs"] = map_vehicles[id]["lastLocs"].slice(-(maxLastLocs));
-                    map_vehicles[id]["lastLocs"].push(newPos);
-                    map_vehicles[id]["last_seen"]++;
-                }
+                map_vehicles[id]["marker"].setLatLng(newPos);
+                map_vehicles[id]["marker"].setPopupContent(`
+                    <b>Train ${vehicle.trainNumber}</b><br>
+                    Type: ${vehicle.trainType}<br>
+                    Speed: ${vehicle.speed} km/h<br>
+                    Lat: ${vehicle.lat}<br>
+                    Lon: ${vehicle.lon}<br>
+                    <button onclick='updateVehicleIcon(${vehicle.trainNumber})'>Update vehicle</button><br>
+                    <a href="./info.php?vehicle=${vehicle.trainNumber}">More info</a>
+                `);
+                map_vehicles[id]["lastLocs"] = map_vehicles[id]["lastLocs"].slice(-(maxLastLocs));
+                map_vehicles[id]["lastLocs"].push(newPos);
+                map_vehicles[id]["last_seen"]++;
             } else createVehicleMarker(vehicle);
         }
     }
