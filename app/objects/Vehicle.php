@@ -38,4 +38,12 @@
         return $vehicles;
     }
     if (isset($_GET["getVehicles"]) && $_GET["getVehicles"]==true) echo json_encode(getVehicles());
+
+    /* Find live vehicle location */
+    function getVehicleInfo(string $id): ?Vehicle {
+        foreach (getVehicles() as $vehicle) {
+            if ($vehicle->trainNumber==$id) return $vehicle;
+        }
+        return null;
+    }
 ?>

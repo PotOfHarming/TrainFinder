@@ -1,5 +1,5 @@
 <?php
-    class MaterialImage {
+    class TrainImage {
         public string $type;
         public string $url;
         public int $width;

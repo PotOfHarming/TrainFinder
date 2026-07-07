@@ -1,8 +1,12 @@
 <?php
     include_once(__DIR__ . "/../config/Config.php");
     $refresh_rate = getConfig(__DIR__ . "/../config/map.json")["refresh_rate"];
+    require_once(__DIR__ . "/../objects/Ride.php");
+    $rides = getAllRides(false, true, true);
 ?>
 <script>
+    const rides = <?php echo json_encode($rides) ?>
+
     /* variable to keep track of last seen vehicles */
     const MAX_RELOAD_TIME = 300;
     setInterval(() => {
@@ -73,13 +77,105 @@
             Speed: ${vehicle.speed} km/h<br>
             Lat: ${vehicle.lat}<br>
             Lon: ${vehicle.lon}<br>
+            <button onclick='updateVehicleIcon(${vehicle.trainNumber})'>Update vehicle</button><br>
             <a href="./info.php?vehicle=${vehicle.trainNumber}">More info</a>
         `)
         .addTo(map);
+        let icon = null;
+        if (vehicle["trainNumber"] in rides) {
+            let url = rides[vehicle["trainNumber"]]["train_img"];
+            icon = L.divIcon({
+                className: "trainMarker",
+                html: `
+                    <div class="trainImg">
+                        <img src="${url}">
+                    </div>
+                `,
+                iconSize: [60, 30],
+                iconAnchor: [30, 15]
+            });
+        }
+        if (icon != null) marker.setIcon(icon);
+        else {
+            updateVehicles(vehicle["trainNumber"]);
+        }
         map_vehicles[vehicle["trainNumber"]] = {
             marker: marker,
             lastLocs: [[vehicle["lat"], vehicle["lon"]]],
             last_seen: 0
         };
     }
+
+    function updateVehicles(trainNumber) {
+        fetch(`../app/utils/Update.php?type=vehicle&id=${trainNumber}`)
+        .then(()=>{
+            fetch(`../app/objects/ride.php?getRide=${trainNumber}&includeImage=true`)
+            .then(res=>res.json())
+            .then(data=>{
+                let url = data["rideImage"]["url"];
+                map_vehicles[trainNumber].marker.setIcon(
+                    L.divIcon({
+                        className: "trainMarker",
+                        html: `
+                            <div class="trainImg">
+                                <img src="${url}">
+                            </div>
+                        `,
+                        iconSize: [60, 30],
+                        iconAnchor: [30, 15]
+                    }));
+                }
+            )  
+        })
+    }
+
+    function updateVehicleIcon(trainNumber) {
+        let upd_window = window.open(`../app/utils/Update.php?type=vehicle&id=${trainNumber}`, "_blank", "width=320,height=180");
+
+        let check = setInterval(() => {
+            if (upd_window.closed) {
+                clearInterval(check);
+
+                fetch(`../app/objects/ride.php?getRide=${trainNumber}&includeImage=true`)
+                .then(res=>res.json())
+                .then(data=>{
+                    let url = data["rideImage"]["url"];
+                    map_vehicles[trainNumber].marker.setIcon(
+                        L.divIcon({
+                            className: "trainMarker",
+                            html: `
+                                <div class="trainImg">
+                                    <img src="${url}">
+                                </div>
+                            `,
+                            iconSize: [60, 30],
+                            iconAnchor: [30, 15]
+                        }));
+                    }
+                )   
+            }
+        }, 250);
+        
+    }
 </script>
+<style>
+    .trainMarker {
+        width: 60px !important;
+        height: 30px !important;
+        background: none;
+        border: none;
+    }
+
+    .trainImg {
+        width: 60px;
+        height: 30px;
+        overflow: hidden;
+    }
+
+    .trainImg img {
+        display: block;
+        height: 30px;
+        width: auto;
+        background: none;
+    }
+</style>

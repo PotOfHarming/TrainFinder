@@ -46,13 +46,25 @@
                 "CREATE TABLE IF NOT EXISTS materials (
                     material_part VARCHAR(10) NOT NULL,
                     material_type VARCHAR(15) NOT NULL,
-                    material_img VARCHAR(150),
                     material_length INT NOT NULL,
                     has_toilet BOOLEAN,
                     has_power BOOLEAN,
                     allows_bike BOOLEAN,
                     is_accessible BOOLEAN,
                     has_wifi BOOLEAN
+                );",
+
+                "CREATE TABLE IF NOT EXISTS rides (
+                    ride_number VARCHAR(10) NOT NULL,
+                    train_type VARCHAR(15) NOT NULL,
+                    operator VARCHAR(20) NOT NULL
+                );",
+
+                "CREATE TABLE IF NOT EXISTS ride_images (
+                    train_type VARCHAR(25) NOT NULL,
+                    train_img VARCHAR(250) NOT NULL,
+                    img_width INT,
+                    img_height INT
                 );"
             ];
 

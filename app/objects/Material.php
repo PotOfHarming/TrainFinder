@@ -33,7 +33,7 @@
             if ($update && $materialExists) {
                 $update_stmt = $db->getConnection()->prepare("
                     UPDATE materials SET 
-                        `material_part = ?, `material_type` = ?,
+                        `material_part` = ?, `material_type` = ?,
                         `material_length` = ?, `has_toilet` = ?,
                         `has_power` = ?, `allows_bike` = ?,
                         `is_accessible` = ?, `has_wifi` = ? 
@@ -78,6 +78,14 @@
         );
     }
 
+    function getMaterialParts(string $train): array {
+        require_once(__DIR__ . "/../utils/Api.php");
+        $api = new Api();
+        $url = "https://gateway.apiportal.ns.nl/virtual-train-api/v1/trein?ids=" . $train;
+        $res = json_decode($api->getResponse($url), true);
+        return $res;
+    }
+
     /* Get material from the database */
     function getMaterial(string $materialPart, ?bool $save = false): ?Material {
         require_once(__DIR__ . "/../utils/Database.php");
@@ -116,6 +124,7 @@
         $res = json_decode($api->getResponse($url), true);
         foreach ($res as $m) {
             foreach ($m["materieeldelen"] as $material) {
+                if (!isset($material["materieelnummer"])) continue;    
                 $mat = jsonToMaterial($material);
                 array_push($materials, $mat);
                 if ($save) $mat->saveMaterial();
@@ -123,6 +132,4 @@
         }
         return $materials;
     }
-
-    echo json_encode(getAllMaterials(true));
 ?>
