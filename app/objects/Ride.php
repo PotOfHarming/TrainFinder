@@ -3,10 +3,10 @@
     class Ride {
         public string $rideNumber;
         public string $trainType;
-        public string $operator;
+        public ?string $operator;
         public ?RideImage $rideImage;
 
-        public function __construct(string $rideNumber, string $trainType, string $operator, ?RideImage $rideImage = null) {
+        public function __construct(string $rideNumber, string $trainType, ?string $operator = null, ?RideImage $rideImage = null) {
             $this->rideNumber = $rideNumber;
             $this->trainType = $trainType;
             $this->operator = $operator;

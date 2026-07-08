@@ -65,7 +65,7 @@
                 "CREATE TABLE IF NOT EXISTS rides (
                     ride_number VARCHAR(10) NOT NULL,
                     train_type VARCHAR(15) NOT NULL,
-                    operator VARCHAR(20) NOT NULL
+                    operator VARCHAR(20)
                 );",
 
                 "CREATE TABLE IF NOT EXISTS ride_images (

@@ -24,7 +24,7 @@
         $ride = new Ride(
             $id,
             isset($train["vervoerder"]) ? ($train["type"] . "_" . $train["vervoerder"]) : $train["type"], 
-            $train["vervoerder"], 
+            isset($train["vervoerder"]) ? $train["vervoerder"] : null, 
             null
         );
         echo json_encode($ride) . "<br>";
