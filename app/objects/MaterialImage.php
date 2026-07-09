@@ -30,7 +30,7 @@
                 $upd_stmt->execute([$this->type, $this->url, $this->width, $this->height, $this->type]);
             } else {
                 $ins_stmt = $db->getConnection()->prepare("
-                        INSERT INTO `ride_images`(
+                        INSERT INTO `material_images`(
                             `train_type`, `train_img`, `img_width`, `img_height`
                         ) VALUES (
                             ?, ?, ?, ?

@@ -12,10 +12,18 @@
         if (!isset($train["materieeldelen"][0]["materieelnummer"])) $train["materieeldelen"][0]["materieelnummer"] = $train["ritnummer"];
 
         echo "<br><br>";
+        require_once(__DIR__ . "/../objects/MaterialImage.php");
         foreach ($train["materieeldelen"] as $mat) {
             $material = jsonToMaterial($mat);
             $material->saveMaterial(true);
             echo json_encode($material) . "<br>";
+
+            $material_image = new MaterialImage(
+                $mat["type"], $mat["afbeelding"],
+                $mat["breedte"], $mat["hoogte"]
+            );
+            $material_image->saveMaterialImage();
+            echo json_encode($material_image) . "<br>";
         }
 
         echo "<br>";
