@@ -185,13 +185,14 @@
 
     /* Get stations from database unless not available then get them from the api */
     function getStations(): array {
+        global $stations;
         require_once(__DIR__ . "/../utils/Database.php");
         $db = new Database();
         
         $select_stmt = $db->getConnection()->prepare("SELECT * FROM stations");
         $select_stmt->execute();
         $stations_list = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($stations_list == [] || $stations_list == null) {
+        if ($stations_list == [] || $stations_list == null || empty($stations_list)) {
             return [
                 "source" => "API",
                 "stations"=>fetchStations()
@@ -209,6 +210,13 @@
                 );
             }
 
+            if (!isset($stations[$station["code"]])) $stations[$station["code"]] = [
+                "name"=> $station["station_name"], 
+                "type" => $station["station_type"], 
+                "facilities" => $station["has_facilities"],
+                "travelAssistence" => $station["has_travelassistence"]
+            ];
+
             return [
                 "source" => "Database",
                 "stations" => $st_list
@@ -218,8 +226,11 @@
 
     /* function to search for a station using a code (for example TB returns the name, type, has facilities and has travelassistence of tilburg) */
     function searchStation(string $station_code): array {
-        $station_code = strtoupper($station_code);
         global $stations;
+        if (empty($stations) || $stations == []) {
+            
+        }
+        $station_code = strtoupper($station_code);
         if (isset($stations[$station_code])) {
             return $stations[$station_code];
         }

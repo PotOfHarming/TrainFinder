@@ -53,8 +53,7 @@
         $url = "https://gateway.apiportal.ns.nl/Spoorkaart-API/api/v1/storingen";
         $res = json_decode($api->getResponse($url), true)["payload"];
         
-        $disruptions = [
-        ];
+        $disruptions = [];
         require_once(__DIR__ . "/Railway.php");
         foreach ($res["features"] as $disruption) {
             $api_coords = $disruption["geometry"]["coordinates"][0];

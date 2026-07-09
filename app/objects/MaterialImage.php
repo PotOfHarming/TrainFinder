@@ -49,7 +49,6 @@
 
         $stmt = $db->getConnection()->prepare("SELECT COUNT(*) FROM material_images WHERE train_type = ?");
         $stmt->execute([$trainType]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return (bool) $stmt->fetchColumn();
     }

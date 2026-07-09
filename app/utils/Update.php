@@ -15,11 +15,12 @@
         require_once(__DIR__ . "/../objects/MaterialImage.php");
         foreach ($train["materieeldelen"] as $mat) {
             $material = jsonToMaterial($mat);
+            $material->materialType = explode('images/', $mat["afbeelding"])[1];
             $material->saveMaterial(true);
             echo json_encode($material) . "<br>";
 
             $material_image = new MaterialImage(
-                $mat["type"], $mat["afbeelding"],
+                explode('images/', $mat["afbeelding"])[1], $mat["afbeelding"],
                 $mat["breedte"], $mat["hoogte"]
             );
             $material_image->saveMaterialImage();
