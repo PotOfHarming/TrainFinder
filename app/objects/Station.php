@@ -208,14 +208,14 @@
                         $station["tracks"] > 0 ? $station["tracks"] : null
                     )
                 );
-            }
 
-            if (!isset($stations[$station["code"]])) $stations[$station["code"]] = [
-                "name"=> $station["station_name"], 
-                "type" => $station["station_type"], 
-                "facilities" => $station["has_facilities"],
-                "travelAssistence" => $station["has_travelassistence"]
-            ];
+                if (!isset($stations[$station["code"]])) $stations[$station["code"]] = [
+                    "name"=> $station["station_name"], 
+                    "type" => $station["station_type"], 
+                    "facilities" => $station["has_facilities"],
+                    "travelAssistence" => $station["has_travelassistence"]
+                ];
+            }
 
             return [
                 "source" => "Database",
@@ -227,9 +227,7 @@
     /* function to search for a station using a code (for example TB returns the name, type, has facilities and has travelassistence of tilburg) */
     function searchStation(string $station_code): array {
         global $stations;
-        if (empty($stations) || $stations == []) {
-            
-        }
+        if (empty($stations)) getStations();
         $station_code = strtoupper($station_code);
         if (isset($stations[$station_code])) {
             return $stations[$station_code];

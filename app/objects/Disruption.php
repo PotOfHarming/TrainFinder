@@ -52,7 +52,6 @@
         $api = new Api();
         $url = "https://gateway.apiportal.ns.nl/Spoorkaart-API/api/v1/storingen";
         $res = json_decode($api->getResponse($url), true)["payload"];
-        
         $disruptions = [];
         require_once(__DIR__ . "/Railway.php");
         foreach ($res["features"] as $disruption) {
@@ -61,7 +60,7 @@
             $coords = [];
             foreach ($api_coords as $c) array_push($coords, [$c[1], $c[0]]);
             require_once(__DIR__ . "/Station.php");
-            array_push( $disruptions, new Disruption(
+            array_push($disruptions, new Disruption(
                 new Railway(
                     $properties["stations"][0], 
                     searchStation($properties["stations"][0])["name"],
